@@ -9,14 +9,12 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Threading;
 
-namespace CSGOExternal
-{
+namespace CSGOExternal {
 
     /// <summary>
     /// Interaktionslogik für MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
-    {
+    public partial class MainWindow : Window {
         readonly Dictionary<string, int> keys = new Dictionary<string, int>();
         DispatcherTimer _updateUIThread = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(500) };
         Thread _espThread = new Thread(ESPThread);
@@ -28,8 +26,7 @@ namespace CSGOExternal
 
         #region Konstruktor
 
-        public MainWindow()
-        {
+        public MainWindow() {
             InitializeComponent();
         }
 
@@ -37,100 +34,76 @@ namespace CSGOExternal
 
         #region Init
 
-        private void Window_Initialized(object sender, EventArgs e)
-        {
+        private void Window_Initialized(object sender, EventArgs e) {
             Closing += MainWindow_Closing;
 
-            if (ProcUtils.ProcessIsRunning("csgo"))
-            {
+            if (ProcUtils.ProcessIsRunning("csgo")) {
                 Settings.Init();
                 Memory.Init();
                 Init();
                 InitUI();
-            }
-            else
-            {
+            } else {
                 Application.Current.Shutdown();
             }
         }
 
-        private void Init()
-        {
+        private void Init() {
             _updateUIThread.Tick += _updateUIThread_Tick;
             _updateUIThread.Start();
         }
 
-        private void _updateUIThread_Tick(object sender, EventArgs e)
-        {
+        private void _updateUIThread_Tick(object sender, EventArgs e) {
             UpdateInfoLabels();
 
-            if (!ProcUtils.ProcessIsRunning("csgo"))
-            {
+            if (!ProcUtils.ProcessIsRunning("csgo")) {
                 Application.Current.Shutdown();
             }
         }
 
-        private void UpdateInfoLabels()
-        {
+        private void UpdateInfoLabels() {
 
-            if (_espThread.IsAlive)
-            {
+            if (_espThread.IsAlive) {
                 ESPStatusLabel.Content = "ESP Aktiv";
                 ESPStatusLabel.Foreground = Brushes.Green;
-            }
-            else
-            {
+            } else {
                 ESPStatusLabel.Content = "ESP Inaktiv";
                 ESPStatusLabel.Foreground = Brushes.Red;
             }
 
-            if (_triggerbotThread.IsAlive)
-            {
+            if (_triggerbotThread.IsAlive) {
                 TriggerstatusLabel.Content = "Triggerbot Aktiv";
                 TriggerstatusLabel.Foreground = Brushes.Green;
-            }
-            else
-            {
+            } else {
                 TriggerstatusLabel.Content = "Triggerbot Inaktiv";
                 TriggerstatusLabel.Foreground = Brushes.Red;
             }
 
-            if (_aimbotThread.IsAlive)
-            {
+            if (_aimbotThread.IsAlive) {
                 AimbotStatuslabel.Content = "Aimbot Aktiv";
                 AimbotStatuslabel.Foreground = Brushes.Green;
-            }
-            else
-            {
+            } else {
                 AimbotStatuslabel.Content = "Aimbot Inaktiv";
                 AimbotStatuslabel.Foreground = Brushes.Red;
             }
 
-            if (_noFlashThread.IsAlive)
-            {
+            if (_noFlashThread.IsAlive) {
                 NoFlashStatuslabel.Content = "NoFlash Aktiv";
                 NoFlashStatuslabel.Foreground = Brushes.Green;
-            }
-            else
-            {
+            } else {
                 NoFlashStatuslabel.Content = "NoFlash Inaktiv";
                 NoFlashStatuslabel.Foreground = Brushes.Red;
             }
 
-            if (_bunnyhopThread.IsAlive)
-            {
+            if (_bunnyhopThread.IsAlive) {
                 BunnyhopStatuslabel.Content = "Bunnyhop Aktiv";
                 BunnyhopStatuslabel.Foreground = Brushes.Green;
-            }
-            else
-            {
+            } else {
                 BunnyhopStatuslabel.Content = "Bunnyhop Inaktiv";
                 BunnyhopStatuslabel.Foreground = Brushes.Red;
             }
         }
 
-        private void InitUI()
-        {
+        private void InitUI() {
             Settings.ReadSettings();
 
             // glow/esp
@@ -157,24 +130,20 @@ namespace CSGOExternal
             TriggerAutoshootCheckbox.IsChecked = Settings.GetTriggerAuto();
 
 
-            foreach (int keyValue in Enum.GetValues(typeof(Key)))
-            {
-                if (!keys.ContainsKey(Enum.GetName(typeof(Key), keyValue) ?? throw new InvalidOperationException("Der Keyboard Key war nicht im Dictionary enthalten")))
-                {
+            foreach (int keyValue in Enum.GetValues(typeof(Key))) {
+                if (!keys.ContainsKey(Enum.GetName(typeof(Key), keyValue) ?? throw new InvalidOperationException("Der Keyboard Key war nicht im Dictionary enthalten"))) {
                     keys.Add(Enum.GetName(typeof(Key), keyValue) ?? throw new InvalidOperationException(), keyValue);
                 }
             }
 
-            foreach (KeyValuePair<string, int> keyValuePair in keys)
-            {
+            foreach (KeyValuePair<string, int> keyValuePair in keys) {
                 ComboBoxItem comboBoxItem = new ComboBoxItem { Content = keyValuePair.Key };
 
                 Key key = (Key)keyValuePair.Value;
 
                 comboBoxItem.Tag = key;
 
-                if (key == Settings.GetTriggerKey())
-                {
+                if (key == Settings.GetTriggerKey()) {
                     comboBoxItem.IsSelected = true;
                 }
 
@@ -187,16 +156,14 @@ namespace CSGOExternal
             AimbotSmoothSlider.Value = Convert.ToDouble(Settings.GetAimbotSmooth());
             AimbotSmoothTextbox.Text = Convert.ToString(Settings.GetAimbotSmooth());
 
-            foreach (KeyValuePair<string, int> keyValuePair in keys)
-            {
+            foreach (KeyValuePair<string, int> keyValuePair in keys) {
                 ComboBoxItem comboBoxItem = new ComboBoxItem { Content = keyValuePair.Key };
 
                 Key key = (Key)keyValuePair.Value;
 
                 comboBoxItem.Tag = key;
 
-                if (key == Settings.GetAimbotKey())
-                {
+                if (key == Settings.GetAimbotKey()) {
                     comboBoxItem.IsSelected = true;
                 }
 
@@ -204,54 +171,41 @@ namespace CSGOExternal
             }
         }
 
-        private void MainWindow_Closing(object sender, CancelEventArgs e)
-        {
+        private void MainWindow_Closing(object sender, CancelEventArgs e) {
             Settings.UpdateSettings();
 
-            if (_espThread != null)
-            {
-                if (_espThread.IsAlive)
-                {
+            if (_espThread != null) {
+                if (_espThread.IsAlive) {
                     _espThread.Abort();
                 }
             }
 
-            if (_radarThread != null)
-            {
-                if (_radarThread.IsAlive)
-                {
+            if (_radarThread != null) {
+                if (_radarThread.IsAlive) {
                     _radarThread.Abort();
                 }
             }
 
-            if (_triggerbotThread != null)
-            {
-                if (_triggerbotThread.IsAlive)
-                {
+            if (_triggerbotThread != null) {
+                if (_triggerbotThread.IsAlive) {
                     _triggerbotThread.Abort();
                 }
             }
 
-            if (_aimbotThread != null)
-            {
-                if (_aimbotThread.IsAlive)
-                {
+            if (_aimbotThread != null) {
+                if (_aimbotThread.IsAlive) {
                     _aimbotThread.Abort();
                 }
             }
 
-            if (_noFlashThread != null)
-            {
-                if (_noFlashThread.IsAlive)
-                {
+            if (_noFlashThread != null) {
+                if (_noFlashThread.IsAlive) {
                     _noFlashThread.Abort();
                 }
             }
 
-            if (_bunnyhopThread != null)
-            {
-                if (_bunnyhopThread.IsAlive)
-                {
+            if (_bunnyhopThread != null) {
+                if (_bunnyhopThread.IsAlive) {
                     _bunnyhopThread.Abort();
                 }
             }
@@ -262,10 +216,8 @@ namespace CSGOExternal
 
         #region Threads
 
-        private static void ESPThread()
-        {
-            while (true)
-            {
+        private static void ESPThread() {
+            while (true) {
                 Glow.Render();
                 Thread.Sleep(1);
             }
@@ -273,10 +225,8 @@ namespace CSGOExternal
         }
 
         [STAThread]
-        private static void TriggerbotThread()
-        {
-            while (true)
-            {
+        private static void TriggerbotThread() {
+            while (true) {
                 Triggerbot.Run();
                 Thread.Sleep(1);
             }
@@ -284,20 +234,16 @@ namespace CSGOExternal
         }
 
         [STAThread]
-        private static void AimbotThread()
-        {
-            while (true)
-            {
+        private static void AimbotThread() {
+            while (true) {
                 Aimbot.Run();
                 Thread.Sleep(1);
             }
 
         }
 
-        private static void NoFlashThread()
-        {
-            while (true)
-            {
+        private static void NoFlashThread() {
+            while (true) {
                 NoFlash.Run();
                 Thread.Sleep(1);
             }
@@ -305,20 +251,16 @@ namespace CSGOExternal
         }
 
         [STAThread]
-        private static void BunnyhopThread()
-        {
-            while (true)
-            {
+        private static void BunnyhopThread() {
+            while (true) {
                 Bunnyhop.Run();
                 Thread.Sleep(1);
             }
 
         }
 
-        private static void RadarThread()
-        {
-            while (true)
-            {
+        private static void RadarThread() {
+            while (true) {
                 Radar.Run();
                 Thread.Sleep(1);
             }
@@ -330,16 +272,11 @@ namespace CSGOExternal
 
         #region Glow
 
-        private void ESPButton_Click_1(object sender, RoutedEventArgs e)
-        {
-            if (_espThread != null)
-            {
-                if (_espThread.IsAlive)
-                {
+        private void ESPButton_Click_1(object sender, RoutedEventArgs e) {
+            if (_espThread != null) {
+                if (_espThread.IsAlive) {
                     _espThread.Abort();
-                }
-                else
-                {
+                } else {
                     _espThread = new Thread(ESPThread);
                     _espThread.Start();
                 }
@@ -347,10 +284,8 @@ namespace CSGOExternal
 
         }
 
-        private void TeamSliderRot_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
-        {
-            if (e.OldValue <= 0)
-            {
+        private void TeamSliderRot_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e) {
+            if (e.OldValue <= 0) {
                 return;
             }
 
@@ -360,10 +295,8 @@ namespace CSGOExternal
             Settings.SetTeamColorRed(Convert.ToInt32(value));
         }
 
-        private void TeamSliderGrün_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
-        {
-            if (e.OldValue <= 0)
-            {
+        private void TeamSliderGrün_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e) {
+            if (e.OldValue <= 0) {
                 return;
             }
 
@@ -373,10 +306,8 @@ namespace CSGOExternal
             Settings.SetTeamColorGreen(Convert.ToInt32(value));
         }
 
-        private void TeamSliderBlau_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
-        {
-            if (e.OldValue <= 0)
-            {
+        private void TeamSliderBlau_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e) {
+            if (e.OldValue <= 0) {
                 return;
             }
 
@@ -386,10 +317,8 @@ namespace CSGOExternal
             Settings.SetTeamColorBlue(Convert.ToInt32(value));
         }
 
-        private void EnemySliderRot_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
-        {
-            if (e.OldValue <= 0)
-            {
+        private void EnemySliderRot_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e) {
+            if (e.OldValue <= 0) {
                 return;
             }
 
@@ -399,10 +328,8 @@ namespace CSGOExternal
             Settings.SetEnemyColorRed(Convert.ToInt32(value));
         }
 
-        private void EnemySliderGrün_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
-        {
-            if (e.OldValue <= 0)
-            {
+        private void EnemySliderGrün_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e) {
+            if (e.OldValue <= 0) {
                 return;
             }
 
@@ -412,10 +339,8 @@ namespace CSGOExternal
             Settings.SetEnemyColorGreen(Convert.ToInt32(value));
         }
 
-        private void EnemySliderBlau_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
-        {
-            if (e.OldValue <= 0)
-            {
+        private void EnemySliderBlau_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e) {
+            if (e.OldValue <= 0) {
                 return;
             }
 
@@ -425,117 +350,99 @@ namespace CSGOExternal
             Settings.SetEnemyColorBlue(Convert.ToInt32(value));
         }
 
-        private void TeamSliderRotTextbox_TextChanged(object sender, TextChangedEventArgs e)
-        {
+        private void TeamSliderRotTextbox_TextChanged(object sender, TextChangedEventArgs e) {
             int value = Convert.ToInt32(TeamSliderRotTextbox.Text);
 
-            if (value > 0 && value <= 255)
-            {
+            if (value > 0 && value <= 255) {
                 TeamSliderRot.Value = value;
             }
 
             Settings.SetTeamColorRed(value);
         }
 
-        private void TeamSliderGrünTextbox_TextChanged(object sender, TextChangedEventArgs e)
-        {
+        private void TeamSliderGrünTextbox_TextChanged(object sender, TextChangedEventArgs e) {
 
             int value = Convert.ToInt32(TeamSliderGrünTextbox.Text);
 
-            if (value > 0 && value <= 255)
-            {
+            if (value > 0 && value <= 255) {
                 TeamSliderGrün.Value = value;
             }
 
             Settings.SetTeamColorGreen(value);
         }
 
-        private void TeamSliderBlauTextbox_TextChanged(object sender, TextChangedEventArgs e)
-        {
+        private void TeamSliderBlauTextbox_TextChanged(object sender, TextChangedEventArgs e) {
 
             int value = Convert.ToInt32(TeamSliderBlauTextbox.Text);
 
-            if (value > 0 && value <= 255)
-            {
+            if (value > 0 && value <= 255) {
                 TeamSliderBlau.Value = value;
             }
 
             Settings.SetTeamColorBlue(value);
         }
 
-        private void EnemySliderRotTextbox_TextChanged(object sender, TextChangedEventArgs e)
-        {
+        private void EnemySliderRotTextbox_TextChanged(object sender, TextChangedEventArgs e) {
+
             int value = Convert.ToInt32(EnemySliderRotTextbox.Text);
 
-            if (value > 0 && value <= 255)
-            {
+            if (value > 0 && value <= 255) {
                 EnemySliderRot.Value = value;
             }
 
             Settings.SetEnemyColorRed(value);
+
         }
 
-        private void EnemySliderGrünTextbox_TextChanged(object sender, TextChangedEventArgs e)
-        {
+        private void EnemySliderGrünTextbox_TextChanged(object sender, TextChangedEventArgs e) {
             int value = Convert.ToInt32(EnemySliderGrünTextbox.Text);
 
-            if (value > 0 && value <= 255)
-            {
+            if (value > 0 && value <= 255) {
                 EnemySliderGrün.Value = value;
             }
 
             Settings.SetEnemyColorGreen(value);
         }
 
-        private void EnemySliderBlauTextbox_TextChanged(object sender, TextChangedEventArgs e)
-        {
+        private void EnemySliderBlauTextbox_TextChanged(object sender, TextChangedEventArgs e) {
             int value = Convert.ToInt32(EnemySliderBlauTextbox.Text);
 
-            if (value > 0 && value <= 255)
-            {
+            if (value > 0 && value <= 255) {
                 EnemySliderBlau.Value = value;
             }
 
             Settings.SetEnemyColorBlue(value);
         }
 
-        private void DrawTeammatesCheckbox_Checked(object sender, RoutedEventArgs e)
-        {
+        private void DrawTeammatesCheckbox_Checked(object sender, RoutedEventArgs e) {
             Settings.SetDrawTeammates(true);
         }
 
-        private void DrawEnemiesCheckbox_Checked(object sender, RoutedEventArgs e)
-        {
+        private void DrawEnemiesCheckbox_Checked(object sender, RoutedEventArgs e) {
             Settings.SetDrawEnemies(true);
         }
 
-        private void DrawBombCheckbox_Checked(object sender, RoutedEventArgs e)
-        {
+        private void DrawBombCheckbox_Checked(object sender, RoutedEventArgs e) {
             Settings.SetDrawBomb(true);
         }
 
-        private void DrawChickenCheckbox_Checked(object sender, RoutedEventArgs e)
-        {
+        private void DrawChickenCheckbox_Checked(object sender, RoutedEventArgs e) {
             Settings.SetDrawChicken(true);
         }
 
-        private void DrawTeammatesCheckbox_Unchecked(object sender, RoutedEventArgs e)
-        {
+        private void DrawTeammatesCheckbox_Unchecked(object sender, RoutedEventArgs e) {
             Settings.SetDrawTeammates(false);
         }
 
-        private void DrawEnemiesCheckbox_Unchecked(object sender, RoutedEventArgs e)
-        {
+        private void DrawEnemiesCheckbox_Unchecked(object sender, RoutedEventArgs e) {
             Settings.SetDrawEnemies(false);
         }
 
-        private void DrawBombCheckbox_Unchecked(object sender, RoutedEventArgs e)
-        {
+        private void DrawBombCheckbox_Unchecked(object sender, RoutedEventArgs e) {
             Settings.SetDrawBomb(false);
         }
 
-        private void DrawChickenCheckbox_Unchecked(object sender, RoutedEventArgs e)
-        {
+        private void DrawChickenCheckbox_Unchecked(object sender, RoutedEventArgs e) {
             Settings.SetDrawChicken(false);
         }
 
@@ -543,26 +450,19 @@ namespace CSGOExternal
 
         #region Triggerbot
 
-        private void TriggerButton_Click(object sender, RoutedEventArgs e)
-        {
-            if (_triggerbotThread != null)
-            {
-                if (_triggerbotThread.IsAlive)
-                {
+        private void TriggerButton_Click(object sender, RoutedEventArgs e) {
+            if (_triggerbotThread != null) {
+                if (_triggerbotThread.IsAlive) {
                     _triggerbotThread.Abort();
-                }
-                else
-                {
+                } else {
                     _triggerbotThread = new Thread(TriggerbotThread);
                     _triggerbotThread.Start();
                 }
             }
         }
 
-        private void TriggerbotDelaySlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
-        {
-            if (e.OldValue <= 0)
-            {
+        private void TriggerbotDelaySlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e) {
+            if (e.OldValue <= 0) {
                 return;
             }
 
@@ -571,42 +471,50 @@ namespace CSGOExternal
             Settings.SetTriggerDelay(Convert.ToInt32(value));
         }
 
-        private void TriggerbotDelayTextbox_TextChanged(object sender, TextChangedEventArgs e)
-        {
+        private void TriggerbotDelayTextbox_TextChanged(object sender, TextChangedEventArgs e) {
             int value = Convert.ToInt32(TriggerbotDelayTextbox.Text);
 
-            if (value > 0 && value <= 255)
-            {
+            if (value > 0 && value <= 255) {
                 TriggerbotDelaySlider.Value = value;
             }
 
             Settings.SetTriggerDelay(value);
         }
 
-        private void ComboBoxKeys_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
+        private void ComboBoxKeys_SelectionChanged(object sender, SelectionChangedEventArgs e) {
             var item = ComboBoxKeys.SelectedItem as ComboBoxItem;
 
             Settings.SetTriggerKey((Key)item.Tag);
         }
 
-        private void TriggerAutoshootCheckbox_Checked(object sender, RoutedEventArgs e)
-        {
+        private void TriggerAutoshootCheckbox_Checked(object sender, RoutedEventArgs e) {
             Settings.SetTriggerAuto(true);
         }
 
-        private void TriggerAutoshootCheckbox_Unchecked(object sender, RoutedEventArgs e)
-        {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void TriggerAutoshootCheckbox_Unchecked(object sender, RoutedEventArgs e) {
             Settings.SetTriggerAuto(false);
         }
 
-        private void TriggerteamCheckbox_Checked(object sender, RoutedEventArgs e)
-        {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void TriggerteamCheckbox_Checked(object sender, RoutedEventArgs e) {
             Settings.SetTriggerTeam(true);
         }
 
-        private void TriggerteamCheckbox_Unchecked(object sender, RoutedEventArgs e)
-        {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void TriggerteamCheckbox_Unchecked(object sender, RoutedEventArgs e) {
             Settings.SetTriggerTeam(false);
         }
 
@@ -614,10 +522,8 @@ namespace CSGOExternal
 
         #region Aimbot
 
-        private void AimbotFOVSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
-        {
-            if (e.OldValue <= 0)
-            {
+        private void AimbotFOVSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e) {
+            if (e.OldValue <= 0) {
                 return;
             }
 
@@ -627,22 +533,18 @@ namespace CSGOExternal
             Settings.SetAimbotFOV(Convert.ToInt32(value));
         }
 
-        private void AimbotFOVTextbox_TextChanged(object sender, TextChangedEventArgs e)
-        {
+        private void AimbotFOVTextbox_TextChanged(object sender, TextChangedEventArgs e) {
             int value = Convert.ToInt32(AimbotFOVTextbox.Text);
 
-            if (value > 0 && value <= 255)
-            {
+            if (value > 0 && value <= 255) {
                 AimbotFOVSlider.Value = value;
             }
 
             Settings.SetAimbotFOV(value);
         }
 
-        private void AimbotSmoothSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
-        {
-            if (e.OldValue <= 0)
-            {
+        private void AimbotSmoothSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e) {
+            if (e.OldValue <= 0) {
                 return;
             }
 
@@ -652,55 +554,44 @@ namespace CSGOExternal
             Settings.SetAimbotSmooth(Convert.ToInt32(value));
         }
 
-        private void AimbotSmoothTextbox_TextChanged(object sender, TextChangedEventArgs e)
-        {
+        private void AimbotSmoothTextbox_TextChanged(object sender, TextChangedEventArgs e) {
             int value = Convert.ToInt32(AimbotSmoothTextbox.Text);
 
-            if (value > 0 && value <= 255)
-            {
+            if (value > 0 && value <= 255) {
                 AimbotSmoothSlider.Value = value;
             }
 
             Settings.SetAimbotSmooth(value);
         }
 
-        private void AimbotHitboxCombobox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
+        private void AimbotHitboxCombobox_SelectionChanged(object sender, SelectionChangedEventArgs e) {
             var item = AimbotHitboxCombobox.SelectedItem as ComboBoxItem;
 
             Settings.SetAimbotBone((int)item.Tag);
         }
 
-        private void AimbotButton_Click(object sender, RoutedEventArgs e)
-        {
-            if (_aimbotThread != null)
-            {
-                if (_aimbotThread.IsAlive)
-                {
+        private void AimbotButton_Click(object sender, RoutedEventArgs e) {
+            if (_aimbotThread != null) {
+                if (_aimbotThread.IsAlive) {
                     _aimbotThread.Abort();
-                }
-                else
-                {
+                } else {
                     _aimbotThread = new Thread(AimbotThread);
                     _aimbotThread.Start();
                 }
             }
         }
 
-        private void AimbotKeyCombobox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
+        private void AimbotKeyCombobox_SelectionChanged(object sender, SelectionChangedEventArgs e) {
             var item = AimbotKeyCombobox.SelectedItem as ComboBoxItem;
 
             Settings.SetAimbotKey((Key)item.Tag);
         }
 
-        private void AimbotAutoCheckbox_Checked(object sender, RoutedEventArgs e)
-        {
+        private void AimbotAutoCheckbox_Checked(object sender, RoutedEventArgs e) {
             Settings.SetAimAuto(true);
         }
 
-        private void AimbotAutoCheckbox_Unchecked(object sender, RoutedEventArgs e)
-        {
+        private void AimbotAutoCheckbox_Unchecked(object sender, RoutedEventArgs e) {
             Settings.SetAimAuto(false);
         }
 
@@ -708,16 +599,11 @@ namespace CSGOExternal
 
         #region NoFlash
 
-        private void NoFlashButton_Click(object sender, RoutedEventArgs e)
-        {
-            if (_noFlashThread != null)
-            {
-                if (_noFlashThread.IsAlive)
-                {
+        private void NoFlashButton_Click(object sender, RoutedEventArgs e) {
+            if (_noFlashThread != null) {
+                if (_noFlashThread.IsAlive) {
                     _noFlashThread.Abort();
-                }
-                else
-                {
+                } else {
                     _noFlashThread = new Thread(NoFlashThread);
                     _noFlashThread.Start();
                 }
@@ -728,16 +614,11 @@ namespace CSGOExternal
 
         #region Bunnyhop
 
-        private void BunnyhopButton_Click(object sender, RoutedEventArgs e)
-        {
-            if (_bunnyhopThread != null)
-            {
-                if (_bunnyhopThread.IsAlive)
-                {
+        private void BunnyhopButton_Click(object sender, RoutedEventArgs e) {
+            if (_bunnyhopThread != null) {
+                if (_bunnyhopThread.IsAlive) {
                     _bunnyhopThread.Abort();
-                }
-                else
-                {
+                } else {
                     _bunnyhopThread = new Thread(BunnyhopThread);
                     _bunnyhopThread.Start();
                 }
@@ -749,16 +630,11 @@ namespace CSGOExternal
 
         #region Radar
 
-        private void RadarButton_Click(object sender, RoutedEventArgs e)
-        {
-            if (_radarThread != null)
-            {
-                if (_radarThread.IsAlive)
-                {
+        private void RadarButton_Click(object sender, RoutedEventArgs e) {
+            if (_radarThread != null) {
+                if (_radarThread.IsAlive) {
                     _radarThread.Abort();
-                }
-                else
-                {
+                } else {
                     _radarThread = new Thread(RadarThread);
                     _radarThread.Start();
                 }

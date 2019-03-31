@@ -22,9 +22,9 @@ namespace CSGOExternal.Classes
                 {
                     int delay = Settings.GetTriggerDelay() == 0 ? 1 : Settings.GetTriggerDelay();
 
-                    Memory.WriteBool(localplayer.Offset + Offsets.dwForceAttack, true);
+                    NativeMethods.mouse_event(0x0002, 0, 0, 0, 0);
                     Thread.Sleep(delay);
-                    Memory.WriteBool(localplayer.Offset + Offsets.dwForceAttack, false);
+                    NativeMethods.mouse_event(0x0004, 0, 0, 0, 0);
                 }
             }
         }
