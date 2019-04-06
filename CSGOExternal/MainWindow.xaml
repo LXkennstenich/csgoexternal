@@ -82,10 +82,13 @@
                     <Slider x:Name="AimbotSmoothSlider" HorizontalAlignment="Left" Margin="10,138,0,0" VerticalAlignment="Top" Width="175" Grid.ColumnSpan="2" ValueChanged="AimbotSmoothSlider_ValueChanged"/>
                     <TextBox x:Name="AimbotSmoothTextbox" Grid.Column="2" HorizontalAlignment="Left" Height="23" Margin="5.355,133,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="65" TextChanged="AimbotSmoothTextbox_TextChanged"/>
                     <Label Content="Aimkey" HorizontalAlignment="Left" Margin="10,161,0,0" VerticalAlignment="Top" Grid.ColumnSpan="3" Width="265"/>
-                    <ComboBox x:Name="AimbotHitboxCombobox" HorizontalAlignment="Left" Margin="148,102,0,0" VerticalAlignment="Top" Width="265" SelectionChanged="AimbotHitboxCombobox_SelectionChanged" Grid.Column="2"/>
+                    <ComboBox x:Name="AimbotHitboxCombobox" HorizontalAlignment="Left" Margin="148,193,0,0" VerticalAlignment="Top" Width="265" SelectionChanged="AimbotHitboxCombobox_SelectionChanged" Grid.Column="2"/>
                     <CheckBox x:Name="AimbotAutoCheckbox" Content="Auto-Aim" Grid.Column="2" HorizontalAlignment="Left" Margin="148,46,0,0" VerticalAlignment="Top" Width="205" Checked="AimbotAutoCheckbox_Checked" Unchecked="AimbotAutoCheckbox_Unchecked"/>
                     <ComboBox x:Name="AimbotKeyCombobox" HorizontalAlignment="Left" Margin="10,193,0,0" VerticalAlignment="Top" Width="265" Grid.ColumnSpan="3" SelectionChanged="AimbotKeyCombobox_SelectionChanged"/>
-                    <Label Content="Hitbox" HorizontalAlignment="Left" Margin="148,70,0,0" VerticalAlignment="Top" Width="265" Grid.Column="2"/>
+                    <Label Content="Hitbox" HorizontalAlignment="Left" Margin="148,161,0,0" VerticalAlignment="Top" Width="265" Grid.Column="2"/>
+                    <CheckBox x:Name="aimOnClosestPlayerCheckbox" Content="Closest Distance" Grid.Column="2" HorizontalAlignment="Left" Margin="148,70,0,0" VerticalAlignment="Top" Width="205" Checked="AimOnClosestPlayerCheckbox_Checked" Unchecked="AimOnClosestPlayerCheckbox_Unchecked"/>
+                    <CheckBox x:Name="aimOnClosestToCrosshairCheckbox" Content="Closest to Crosshair" Grid.Column="2" HorizontalAlignment="Left" Margin="148,94,0,0" VerticalAlignment="Top" Width="205" Checked="AimOnClosestToCrosshairCheckbox_Checked" Unchecked="AimOnClosestToCrosshairCheckbox_Unchecked"/>
+                    <CheckBox x:Name="VisibilityAimCheckbox" Content="Visibility Check" Grid.Column="2" HorizontalAlignment="Left" Margin="148,118,0,0" VerticalAlignment="Top" Width="205" Checked="VisibilityAimCheckbox_Checked" Unchecked="VisibilityAimCheckbox_Unchecked"/>
                 </Grid>
             </TabItem>
             <TabItem Header="NoFlash">
@@ -116,6 +119,9 @@
                         </Button.RenderTransform>
                     </Button>
                     <Label x:Name="BunnyhopStatuslabel" Content="" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Grid.ColumnSpan="3" Width="291"/>
+                    <ComboBox x:Name="BunnyhopKeyCombobox" Grid.ColumnSpan="3" HorizontalAlignment="Left" Margin="10,74,0,0" VerticalAlignment="Top" Width="227" SelectionChanged="BunnyhopKeyCombobox_SelectionChanged"/>
+                    <Label Content="Bunnyhop Key" HorizontalAlignment="Left" Margin="10,42,0,0" VerticalAlignment="Top" Grid.ColumnSpan="3" Width="227"/>
+                    <CheckBox x:Name="BunnyhopLegitCheckbox" Content="Legit Mode" HorizontalAlignment="Left" Margin="10,108,0,0" VerticalAlignment="Top" Grid.ColumnSpan="3" Width="227" Checked="BunnyhopLegitCheckbox_Checked" Unchecked="BunnyhopLegitCheckbox_Unchecked"/>
                 </Grid>
             </TabItem>
             <TabItem Header="Radar">
@@ -127,6 +133,7 @@
                     </Grid.ColumnDefinitions>
                     <Label x:Name="RadarStatuslabel" Content="" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Grid.ColumnSpan="3" Width="330"/>
                     <Button x:Name="RadarButton" Grid.ColumnSpan="2" Content="Radar An/Aus" HorizontalAlignment="Left" Margin="10,328,0,0" VerticalAlignment="Top" Width="172" Click="RadarButton_Click"/>
+                    <CheckBox x:Name="ClRenderCheckbox" Content="CLRender" HorizontalAlignment="Left" Margin="10,42,0,0" VerticalAlignment="Top" Grid.ColumnSpan="2" Width="182" Checked="ClRenderCheckbox_Checked" Unchecked="ClRenderCheckbox_Unchecked"/>
                 </Grid>
             </TabItem>
         </TabControl>

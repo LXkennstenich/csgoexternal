@@ -58,6 +58,10 @@ namespace CSGOExternal.Classes
             return Convert.ToBoolean(Memory.ReadInt(Offset + Offsets.m_bDormant));
         }
 
+        internal bool IsSpottedByMask() {
+            return Convert.ToBoolean(Memory.ReadInt(Offset + Offsets.m_bSpottedByMask));
+        }
+
         internal bool IsSpotted()
         {
             return Convert.ToBoolean(Memory.ReadInt(Offset + Offsets.m_bSpotted));

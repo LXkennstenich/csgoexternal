@@ -155,6 +155,9 @@ namespace CSGOExternal {
             AimbotFOVTextbox.Text = Convert.ToString(Settings.GetAimbotFOV());
             AimbotSmoothSlider.Value = Convert.ToDouble(Settings.GetAimbotSmooth());
             AimbotSmoothTextbox.Text = Convert.ToString(Settings.GetAimbotSmooth());
+            aimOnClosestPlayerCheckbox.IsChecked = Settings.GetAimOnClosestPlayer();
+            aimOnClosestToCrosshairCheckbox.IsChecked = Settings.GetAimOnClosestToCrosshair();
+            VisibilityAimCheckbox.IsChecked = Settings.GetVisibilityCheck();
 
             foreach (KeyValuePair<string, int> keyValuePair in keys) {
                 ComboBoxItem comboBoxItem = new ComboBoxItem { Content = keyValuePair.Key };
@@ -169,6 +172,28 @@ namespace CSGOExternal {
 
                 AimbotKeyCombobox.Items.Add(comboBoxItem);
             }
+
+            //Bunnyhop
+            BunnyhopLegitCheckbox.IsChecked = Settings.GetBunnyhopLegit();
+
+            foreach (KeyValuePair<string, int> keyValuePair in keys) {
+                ComboBoxItem comboBoxItem = new ComboBoxItem { Content = keyValuePair.Key };
+
+                Key key = (Key)keyValuePair.Value;
+
+                comboBoxItem.Tag = key;
+
+                if (key == Settings.GetAimbotKey()) {
+                    comboBoxItem.IsSelected = true;
+                }
+
+                BunnyhopKeyCombobox.Items.Add(comboBoxItem);
+            }
+
+            //Radar
+            ClRenderCheckbox.IsChecked = Settings.GetClRender();
+
+
         }
 
         private void MainWindow_Closing(object sender, CancelEventArgs e) {
@@ -595,6 +620,30 @@ namespace CSGOExternal {
             Settings.SetAimAuto(false);
         }
 
+        private void AimOnClosestPlayerCheckbox_Checked(object sender, RoutedEventArgs e) {
+            Settings.SetAimOnClosestPlayer(true);
+        }
+
+        private void AimOnClosestToCrosshairCheckbox_Checked(object sender, RoutedEventArgs e) {
+            Settings.SetAimOnClosestToCrosshair(true);
+        }
+
+        private void VisibilityAimCheckbox_Checked(object sender, RoutedEventArgs e) {
+            Settings.SetVisibilityCheck(true);
+        }
+
+        private void AimOnClosestPlayerCheckbox_Unchecked(object sender, RoutedEventArgs e) {
+            Settings.SetAimOnClosestPlayer(false);
+        }
+
+        private void AimOnClosestToCrosshairCheckbox_Unchecked(object sender, RoutedEventArgs e) {
+            Settings.SetAimOnClosestToCrosshair(false);
+        }
+
+        private void VisibilityAimCheckbox_Unchecked(object sender, RoutedEventArgs e) {
+            Settings.SetVisibilityCheck(false);
+        }
+
         #endregion
 
         #region NoFlash
@@ -625,6 +674,19 @@ namespace CSGOExternal {
             }
         }
 
+        private void BunnyhopKeyCombobox_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+            var item = AimbotKeyCombobox.SelectedItem as ComboBoxItem;
+
+            Settings.SetBunnyhopKey((Key)item.Tag);
+        }
+
+        private void BunnyhopLegitCheckbox_Checked(object sender, RoutedEventArgs e) {
+            Settings.SetBunnyhopLegit(true);
+        }
+
+        private void BunnyhopLegitCheckbox_Unchecked(object sender, RoutedEventArgs e) {
+            Settings.SetBunnyhopLegit(false);
+        }
 
         #endregion
 
@@ -639,6 +701,14 @@ namespace CSGOExternal {
                     _radarThread.Start();
                 }
             }
+        }
+
+        private void ClRenderCheckbox_Checked(object sender, RoutedEventArgs e) {
+            Settings.SetClRender(true);
+        }
+
+        private void ClRenderCheckbox_Unchecked(object sender, RoutedEventArgs e) {
+            Settings.SetClRender(false);
         }
 
         #endregion

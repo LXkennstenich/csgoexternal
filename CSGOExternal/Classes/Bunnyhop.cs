@@ -14,15 +14,15 @@ namespace CSGOExternal.Classes
 
             if(localplayer.IsInGame())
             {
-                if((NativeMethods.GetAsyncKeyState(KeyInterop.VirtualKeyFromKey(Key.Space)) & 0x8000) != 0)
+                if((NativeMethods.GetAsyncKeyState(KeyInterop.VirtualKeyFromKey(Settings.GetBunnyhopKey())) & 0x8000) != 0 )
                 {
                     bool isAlive = localplayer.IsAlive();
 
                     if (localplayer.GetFlag() == 257 && isAlive)
                     {
-                        Memory.WriteInt(localplayer.Offset + Offsets.dwForceJump, 6);
-                        Thread.Sleep(3);
                         Memory.WriteInt(localplayer.Offset + Offsets.dwForceJump, 5);
+                        Thread.Sleep(50);
+                        Memory.WriteInt(localplayer.Offset + Offsets.dwForceJump, 4);
                     }
                 }
             }

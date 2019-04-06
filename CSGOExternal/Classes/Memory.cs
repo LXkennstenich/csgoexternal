@@ -55,6 +55,10 @@ namespace CSGOExternal.Classes
             return ProcessWrapper.ReadProcessMemory<Vector3>(Handle, address);
         }
 
+        internal static Matrix ReadMatrix(IntPtr address) {
+            return ProcessWrapper.ReadProcessMemory<Matrix>(Handle, address);
+        }
+
         internal static void WriteByte(IntPtr address, byte value)
         {
             ProcessWrapper.WriteProcessMemory<byte>(Handle, address, value, ref numberOfBytesWritten);

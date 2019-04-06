@@ -103,6 +103,30 @@ namespace CSGOExternal.Classes
             return Convert.ToInt32(configUtils.GetValue("AimbotBone"));
         }
 
+        internal static bool GetClRender() {
+            return Convert.ToBoolean(configUtils.GetValue("ClRender"));
+        }
+
+        internal static bool GetAimOnClosestPlayer() {
+            return Convert.ToBoolean(configUtils.GetValue("AimOnClosestPlayer"));
+        }
+
+        internal static bool GetAimOnClosestToCrosshair() {
+            return Convert.ToBoolean(configUtils.GetValue("AimOnClosestToCrosshair"));
+        }
+
+        internal static bool GetVisibilityCheck() {
+            return Convert.ToBoolean(configUtils.GetValue("VisiblityCheck"));
+        }
+
+        internal static Key GetBunnyhopKey() {
+            return (Key)configUtils.GetValue("BunnyhopKey");
+        }
+
+        internal static bool GetBunnyhopLegit() {
+            return Convert.ToBoolean(configUtils.GetValue("BunnyhopLegit"));
+        }
+
         internal static void SetAimbotFOV(int value)
         {
             configUtils.SetValue("AimbotFOV", value);
@@ -211,6 +235,34 @@ namespace CSGOExternal.Classes
             configUtils.SetValue("TriggerAuto", value);
         }
 
+        internal static void SetClRender(bool value) {
+            configUtils.SetValue("ClRender", value);
+        }
+
+        internal static void SetAimOnClosestPlayer(bool value) {
+            configUtils.SetValue("AimOnClosestPlayer", value);
+        }
+
+        internal static void SetAimOnClosestToCrosshair(bool value) {
+            configUtils.SetValue("AimOnClosestToCrosshair", value);
+        }
+
+        internal static void SetVisibilityCheck(bool value) {
+            configUtils.SetValue("VisiblityCheck", value);
+        }
+
+        internal static void SetBunnyhopKey(Key key) {
+            foreach (int keyValue in Enum.GetValues(typeof(Key))) {
+                if (Enum.GetName(typeof(Key), key) == Enum.GetName(typeof(Key), keyValue)) {
+                    configUtils.SetValue("BunnyhopKey", keyValue);
+                }
+            }
+        }
+
+        internal static void SetBunnyhopLegit(bool value) {
+            configUtils.SetValue("BunnyhopLegit", value);
+        }
+
         internal static void UpdateSettings(bool create = false)
         {
             FileStream fileStream = null;
@@ -240,6 +292,12 @@ namespace CSGOExternal.Classes
                     SetAimbotKey(Key.E);
                     SetAimbotSmooth(10);
                     SetAimbotBone(10);
+                    SetAimOnClosestPlayer(false);
+                    SetAimOnClosestToCrosshair(true);
+                    SetVisibilityCheck(true);
+                    SetBunnyhopLegit(true);
+                    SetBunnyhopKey(Key.Space);
+                    SetClRender(false);
                 }
                 else
                 {
