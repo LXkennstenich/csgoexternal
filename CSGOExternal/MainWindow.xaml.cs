@@ -15,13 +15,45 @@ namespace CSGOExternal {
     /// Interaktionslogik für MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window {
+
+        /// <summary>
+        /// Enthält unsere Keys für die Tastatur/Maus
+        /// </summary>
         readonly Dictionary<string, int> keys = new Dictionary<string, int>();
+
+        /// <summary>
+        /// Eigentlich kein Thread aber UITimer hört sich scheiße an :D
+        /// </summary>
         DispatcherTimer _updateUIThread = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(500) };
+
+        /// <summary>
+        /// Glow/ESP Thread
+        /// </summary>
         Thread _espThread = new Thread(ESPThread);
+
+        /// <summary>
+        /// 
+        /// </summary>
         Thread _triggerbotThread = new Thread(TriggerbotThread);
+
+        /// <summary>
+        /// 
+        /// </summary>
         Thread _aimbotThread = new Thread(AimbotThread);
+
+        /// <summary>
+        /// 
+        /// </summary>
         Thread _noFlashThread = new Thread(NoFlashThread);
+
+        /// <summary>
+        /// 
+        /// </summary>
         Thread _bunnyhopThread = new Thread(BunnyhopThread);
+
+        /// <summary>
+        /// 
+        /// </summary>
         Thread _radarThread = new Thread(RadarThread);
 
         #region Konstruktor
@@ -34,6 +66,11 @@ namespace CSGOExternal {
 
         #region Init
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Window_Initialized(object sender, EventArgs e) {
             Closing += MainWindow_Closing;
 
@@ -183,7 +220,7 @@ namespace CSGOExternal {
 
                 comboBoxItem.Tag = key;
 
-                if (key == Settings.GetAimbotKey()) {
+                if (key == Settings.GetBunnyhopKey()) {
                     comboBoxItem.IsSelected = true;
                 }
 

@@ -18,7 +18,7 @@ namespace CSGOExternal.Classes
                 Entity entity = Triggerbot.entity;
                 entity.Offset = Memory.ReadIntPtr(Offsets.clientDllBaseAddress + Offsets.dwEntityList + (crosshairid - 1) * 0x10);
 
-                if (entity.IsEnemy() && entity.GetHealth() > 0 || Settings.GetTriggerTeam() && entity.GetHealth() > 0)
+                if ((entity.IsEnemy() || Settings.GetTriggerTeam()) && entity.IsAlive())
                 {
                     int delay = Settings.GetTriggerDelay() == 0 ? 1 : Settings.GetTriggerDelay();
 

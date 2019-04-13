@@ -56,7 +56,11 @@ namespace CSGOExternal.Classes
         }
 
         internal static Matrix ReadMatrix(IntPtr address) {
-            return ProcessWrapper.ReadProcessMemory<Matrix>(Handle, address);
+            byte[] viewmatrix = new byte[16 * 4];
+            viewmatrix = ProcessWrapper.ReadProcessMemory<byte>(Handle, address,16 *4);
+            Matrix test = new Matrix(4, 4);
+            test.Read(viewmatrix);
+            return test;
         }
 
         internal static void WriteByte(IntPtr address, byte value)

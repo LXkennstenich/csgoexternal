@@ -25,7 +25,7 @@ namespace CSGOExternal.Classes
 
             if (localplayer.IsInGame())
             {
-                for (int entityIndex = 0; entityIndex < 64; entityIndex++)
+                for (int entityIndex = 0; entityIndex < localplayer.GetMaxPlayers(); entityIndex++)
                 {
                     //entity offset setzen
                     entity.Offset = Memory.ReadIntPtr(Offsets.clientDllBaseAddress + Offsets.dwEntityList + (entityIndex - 1) * 0x10);
@@ -43,7 +43,7 @@ namespace CSGOExternal.Classes
                         continue;
                     }
 
-                    if (isAlive && !isDormant && isEnemy)
+                    if (isAlive && !isDormant && isEnemy && Settings.GetClRender())
                     {
                         cclRender.r = 255;
                         cclRender.g = 0;

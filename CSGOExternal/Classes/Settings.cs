@@ -120,7 +120,7 @@ namespace CSGOExternal.Classes
         }
 
         internal static Key GetBunnyhopKey() {
-            return (Key)configUtils.GetValue("BunnyhopKey");
+            return (Key)Convert.ToInt32(configUtils.GetValue("BunnyhopKey"));
         }
 
         internal static bool GetBunnyhopLegit() {

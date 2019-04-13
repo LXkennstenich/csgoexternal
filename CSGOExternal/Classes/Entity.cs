@@ -163,5 +163,9 @@ namespace CSGOExternal.Classes
 
             return Memory.ReadInt(playerresource + Offsets.m_iCompetitiveWins + i * 4);
         }
+
+        internal bool InAir() {
+            return GetFlag() == 256 || GetFlag() == 258 || GetFlag() == 260 || GetFlag() == 262;
+        }
     }
 }

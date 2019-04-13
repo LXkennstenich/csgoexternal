@@ -14,7 +14,7 @@ namespace CSGOExternal.Classes {
 
         internal static void Run() {
 
-            if ((NativeMethods.GetAsyncKeyState(KeyInterop.VirtualKeyFromKey(Key.LeftAlt)) & 0x8000) != 0) {
+            if ((NativeMethods.GetAsyncKeyState(KeyInterop.VirtualKeyFromKey(Settings.GetAimbotKey())) & 0x8000) != 0) {
 
                 localplayer.Offset = Memory.ReadIntPtr(Offsets.clientDllBaseAddress + Offsets.dwLocalPlayer);
 
@@ -43,6 +43,13 @@ namespace CSGOExternal.Classes {
 
                         target = MathUtils.ClampAngle(target);
 
+                        Vector2 screenSize = Vector2.Zero;
+                        Vector2 screenCenter = Vector2.Zero;
+                        screenSize.X = 2560;
+                        screenSize.Y = 1080;
+                        screenCenter.X = screenSize.X / 2;
+                        screenCenter.Y = screenSize.Y / 2;
+
                         Vector2 vangles = Vector2.Zero;
                         Vector2 eangles = Vector2.Zero;
 
@@ -51,8 +58,8 @@ namespace CSGOExternal.Classes {
 
                         eangles.X = target.X;
                         eangles.Y = target.Y;
-
-                        if (MathUtils.PointInCircle(eangles, vangles, Settings.GetAimbotFOV())) {
+                        
+                        if (MathUtils.PointInCircle(eangles, screenCenter, Settings.GetAimbotFOV())) {
                             Memory.WriteFloat(Offsets.clientState + Offsets.dwClientState_ViewAngles, target.X);
                             Memory.WriteFloat(Offsets.clientState + Offsets.dwClientState_ViewAngles + 0x4, target.Y);
 
@@ -96,11 +103,15 @@ namespace CSGOExternal.Classes {
                         viewmatrix = Memory.ReadMatrix(Offsets.engineDllBaseAddress + Offsets.dwViewMatrix);
                         Vector2 screenSize = Vector2.Zero;
                         Vector2 screenCenter = Vector2.Zero;
+
                         screenSize.X = 2560;
                         screenSize.Y = 1080;
+
                         screenCenter.X = screenSize.X / 2;
                         screenCenter.Y = screenSize.Y / 2;
+
                         Vector2 enemy = MathUtils.WorldToScreen(viewmatrix, screenSize, bones);
+
                         final = screenCenter.DistanceTo(enemy);
                     } else if(Settings.GetAimOnClosestPlayer()) {
                         Vector3 enemylocation = possibleEntity.GetVectorOrigin();
